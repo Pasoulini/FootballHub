@@ -1,0 +1,33 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Rainmeter files
+*.ini text eol=crlf
+*.inc text eol=crlf
+
+# Scripts
+*.ps1 text eol=crlf
+*.vbs text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Documentation
+*.md text eol=crlf
+*.txt text eol=crlf
+
+# Images - binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+
+# Archives - binary
+*.zip binary
+*.7z binary
+*.rar binary
+
+# Windows specific
+Thumbs.db binary
+Desktop.ini binary
