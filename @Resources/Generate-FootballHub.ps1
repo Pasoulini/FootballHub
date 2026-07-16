@@ -304,9 +304,9 @@ function TeamMatchesImportantList($team, $importantTeams) {
     return $false
 }
 
-function ShouldIncludeLeagueMatch($league, $home, $away) {
+function ShouldIncludeLeagueMatch($league, $homeTeam, $awayTeam) {
     if (-not $league.Teams -or $league.Teams.Count -eq 0) { return $true }
-    return (TeamMatchesImportantList $home $league.Teams) -or (TeamMatchesImportantList $away $league.Teams)
+    return (TeamMatchesImportantList $homeTeam $league.Teams) -or (TeamMatchesImportantList $awayTeam $league.Teams)
 }
 
 function TeamLogo($team) {
