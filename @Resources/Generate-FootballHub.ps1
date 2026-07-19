@@ -62,7 +62,7 @@ function S($val) { return [Math]::Round($val * $Scale) }
 # User Configuration
 # ==========================
 $ShowMissedPenalties = $true          # Show missed/saved penalties (true/false)
-$PenaltyMinuteDisplay = "Hide"        # How to show penalty minutes: AsIs, Hide, ShowPen
+$PenaltyMinuteDisplay = "AsIs"         # How to show penalty minutes: AsIs, Hide, ShowPen
 $FinishedSortOrder = "NewestFirst"     # Finished matches order: NewestFirst, OldestFirst
 
 $Leagues = @(
