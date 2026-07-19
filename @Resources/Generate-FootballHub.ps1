@@ -410,7 +410,7 @@ function Get-GoalInfo($play) {
     $type = "goal"
     if ($play.penaltyKick -eq $true -and -not [string]::IsNullOrWhiteSpace($minute)) {
         switch ($PenaltyMinuteDisplay) {
-            "Hide"    { $minute = "" }
+            "Hide"    { }
             "ShowPen" { $minute = "Pen" }
             default   { $minute = $minute + " (p)" }
         }
