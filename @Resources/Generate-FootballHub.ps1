@@ -36,6 +36,7 @@ $GoalIcon = Join-Path $IconDir "goal.png"
 $PenaltyIcon = Join-Path $IconDir "penalty.png"
 $RedCardIcon = Join-Path $IconDir "red-card.png"
 $MissedPenaltyIcon = Join-Path $IconDir "missed-penalty.png"
+$OwnGoalIcon = Join-Path $IconDir "own-goal.png"
 
 # -------------------------------
 # Settings
@@ -408,7 +409,10 @@ function Get-GoalInfo($play) {
 
     $minute = Get-PlayMinute $play
     $type = "goal"
-    if ($play.penaltyKick -eq $true -and -not [string]::IsNullOrWhiteSpace($minute)) {
+    if ($play.ownGoal -eq $true) {
+        $minute = if ([string]::IsNullOrWhiteSpace($minute)) { "(og)" } else { $minute + " (og)" }
+        $type = "owngoal"
+    } elseif ($play.penaltyKick -eq $true -and -not [string]::IsNullOrWhiteSpace($minute)) {
         switch ($PenaltyMinuteDisplay) {
             "Hide"    { }
             "ShowPen" { $minute = "Pen" }
@@ -534,7 +538,9 @@ function Format-ScorerLines($goals) {
     foreach ($group in ($validGoals | Group-Object { SafeText $_.Name } | Select-Object -First 4)) {
         $name = SafeText $group.Name
         $minutes = @($group.Group | ForEach-Object { SafeText $_.Minute } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 6)
-        $type = if (@($group.Group | Where-Object { $_.Type -eq "penalty" }).Count -gt 0) { "penalty" } else { "goal" }
+        $type = "goal"
+        if (@($group.Group | Where-Object { $_.Type -eq "penalty" }).Count -gt 0) { $type = "penalty" }
+        elseif (@($group.Group | Where-Object { $_.Type -eq "owngoal" }).Count -gt 0) { $type = "owngoal" }
         $text = ""
         if ($minutes.Count -gt 0) {
             $text = $name + " " + ($minutes -join ", ")
@@ -932,6 +938,7 @@ $lines.Add("IconGoal=" + (SafeText $GoalIcon))
 $lines.Add("IconPenalty=" + (SafeText $PenaltyIcon))
 $lines.Add("IconRedCard=" + (SafeText $RedCardIcon))
 $lines.Add("IconMissedPenalty=" + (SafeText $MissedPenaltyIcon))
+$lines.Add("IconOwnGoal=" + (SafeText $OwnGoalIcon))
 $lines.Add("PanelH=" + $panelH)
 $lines.Add("TomorrowBgY=" + $tomorrowBgY)
 $lines.Add("TomorrowBgH=" + $tomorrowBgH)
@@ -980,6 +987,7 @@ for ($i = 1; $i -le $TodayCardCount; $i++) {
                     "missed_penalty"  { $homeIcon = $MissedPenaltyIcon }
                     "red"             { $homeIcon = $RedCardIcon }
                     "goal"            { $homeIcon = $GoalIcon }
+                    "owngoal"         { $homeIcon = $OwnGoalIcon }
                     default           { $homeIcon = $BlankPng }
                 }
             }
@@ -996,6 +1004,7 @@ for ($i = 1; $i -le $TodayCardCount; $i++) {
                     "missed_penalty"  { $awayIcon = $MissedPenaltyIcon }
                     "red"             { $awayIcon = $RedCardIcon }
                     "goal"            { $awayIcon = $GoalIcon }
+                    "owngoal"         { $awayIcon = $OwnGoalIcon }
                     default           { $awayIcon = $BlankPng }
                 }
             }
